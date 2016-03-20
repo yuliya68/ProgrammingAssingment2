@@ -1,0 +1,31 @@
+CacheMatrix <- function(x = matrix()) {
+  Inv <- NULL 
+    set <- function(userValue = matrix()) {
+    x <<- userValue 
+    Inv <<- NULL
+  }
+    get <- function() x
+  setInv <- function(invVal) {
+    Inv <<- invVal 
+    return(Inv)
+  }
+  getInv  <- function() Inv
+  list(set=set, get=get, setInv=setInv, getInv=getInv)
+}
+cacheSolve <- function(x=CacheMatrix(1:4, nrow=2, ncol=2), ...) { 
+    calcInv <- x$getInv() 
+    if(!is.null(calcInv) && is.matrix(calcInv)) { 
+    return(calcInv)
+  }
+    matrixSolve <- x$get()  
+    calcInv <- tryCatch({ 
+    solve(matrixSolve)
+  }, warning=function(w) {
+    message(w)
+  }, error=function(e) {
+    message(e)
+    message("\n")
+  })
+    message(" Value of inverse to:") 
+  x$setInv(calcInv)
+}
